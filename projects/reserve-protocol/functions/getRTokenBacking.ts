@@ -17,8 +17,8 @@ export async function getRTokenBacking({ chainName, rTokenAddress }: Props, { ge
 
     const publicClient = getProvider(chainId);
 
-    const [name, symbol, decimals] = await Promise.all(
-        ['name', 'symbol', 'decimals'].map((functionName) =>
+    const [name, symbol] = await Promise.all(
+        ['name', 'symbol'].map((functionName) =>
             publicClient.readContract({
                 address: rTokenAddress,
                 abi: RToken,
@@ -39,9 +39,6 @@ export async function getRTokenBacking({ chainName, rTokenAddress }: Props, { ge
         ),
     );
 
-    // const totalSupply = formatUnits(BigInt(totalSupplyRaw), Number(decimals));
-    // const price = formatUnits(BigInt(priceRaw), Number(decimals));
-
     const [erc20s, uoaShares, targets] = basketBreakdown as unknown as [`0x${string}`[], bigint[], `0x${string}`[]];
 
     const collateralTokens = await Promise.all(
@@ -58,7 +55,7 @@ export async function getRTokenBacking({ chainName, rTokenAddress }: Props, { ge
     const collateralsOutput = [];
 
     for (let i = 0; i < erc20s.length; i++) {
-        const share = formatUnits(BigInt(uoaShares[i]) * BigInt(100), 18);
+        const share = parseFloat(formatUnits(BigInt(uoaShares[i]) * BigInt(100), 18)).toFixed(2);
         const targetUnit = hexToString(targets[i], { size: 32 });
 
         collateralsOutput.push(`${collateralTokens[i]}`);

@@ -1,18 +1,8 @@
 import { expect, test, beforeAll } from 'vitest';
-import { createTestClient, http, createPublicClient } from 'viem';
+import { http, createPublicClient } from 'viem';
 import { foundry } from 'viem/chains';
-import { createServer } from 'prool';
-import { anvil } from 'prool/instances';
-import { getRTokenList } from '../getRTokenList';
-import { getRTokenInfo } from '../getRTokenInfo';
-
-beforeAll(async () => {
-    const instance = anvil({ forkUrl: 'https://eth.public-rpc.com', forkBlockNumber: 21867212 });
-    await instance.start();
-
-    const server = createServer({ instance });
-    await server.start();
-});
+import { getRTokenList } from '../functions/getRTokenList';
+import { getRTokenInfo } from '../functions/getRTokenInfo';
 
 test('Unsupported chain', async () => {
     const publicClient = createPublicClient({

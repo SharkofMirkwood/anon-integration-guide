@@ -1,26 +1,5 @@
 import { expect, test, beforeAll } from 'vitest';
-import { createTestClient, http } from 'viem';
-import { foundry } from 'viem/chains';
-import { createServer } from 'prool';
-import { anvil } from 'prool/instances';
-import { getRTokenList } from '../getRTokenList';
-
-beforeAll(async () => {
-    const instance = anvil();
-    await instance.start();
-
-    const server = createServer({ instance });
-    await server.start();
-});
-
-test('test viem client mining', async () => {
-    const client = createTestClient({
-        chain: foundry,
-        mode: 'anvil',
-        transport: http(),
-    });
-    const mine = await client.mine({ blocks: 1 });
-});
+import { getRTokenList } from '../functions/getRTokenList';
 
 test('Unsupported chain', async () => {
     const result = await getRTokenList({ chainName: 'polygon' });

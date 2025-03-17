@@ -3,6 +3,7 @@ import { FunctionReturn, FunctionOptions, TransactionParams, toResult, getChainF
 import { FACADE_ADDRESS, supportedChains } from '../constants';
 import RToken from '../abis/RToken';
 import FacadeRead from '../abis/FacadeRead';
+import { getRTokenDetails } from '../utils';
 
 interface Props {
     chainName: string;
@@ -16,27 +17,7 @@ export async function getRTokenInfo({ chainName, rTokenAddress }: Props, { getPr
 
     const publicClient = getProvider(chainId);
 
-    const [name, symbol, decimals, mandate, totalSupplyRaw] = await Promise.all(
-        ['name', 'symbol', 'decimals', 'mandate', 'totalSupply'].map((functionName) =>
-            publicClient.readContract({
-                address: rTokenAddress,
-                abi: RToken,
-                functionName: functionName as any,
-                args: [],
-            }),
-        ),
-    );
-
-    const [basketTokens] = await Promise.all(
-        ['basketTokens'].map((functionName) =>
-            publicClient.readContract({
-                address: FACADE_ADDRESS[chainId],
-                abi: FacadeRead,
-                functionName: functionName as any,
-                args: [rTokenAddress],
-            }),
-        ),
-    );
+    const { name, symbol, decimals, mandate, totalSupply: totalSupplyRaw, basketTokens } = await getRTokenDetails(publicClient, chainId, rTokenAddress);
 
     const totalSupply = formatUnits(BigInt(totalSupplyRaw), Number(decimals));
 

@@ -131,7 +131,7 @@ export const tools: AiTool[] = [
         ],
     },
     {
-        name: 'stakeRToken',
+        name: 'stakeRSR',
         description: 'Stake RTokens to participate in protocol rewards or governance. Specify the RToken address and the amount to stake.',
         required: ['chainName', 'account', 'rTokenAddress', 'amount'],
         props: [
@@ -182,7 +182,7 @@ export const tools: AiTool[] = [
         ],
     },
     {
-        name: 'unstakeRToken',
+        name: 'unstakeRSR',
         description: 'Unstake RTokens that were previously staked. Specify the RToken address and the amount to unstake.',
         required: ['chainName', 'account', 'rTokenAddress', 'amount'],
         props: [
